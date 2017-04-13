@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>客户·列表页·4</title>
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
+<link rel="stylesheet" href="css/xiha.css"/>
+<link rel="stylesheet" type="text/css" href="css/dropload.css">
+<link rel="stylesheet" type="text/css" href="css/mui.min.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<style>
+  .xiha-list-img{width:20px;margin-right:5px;display:block;}
+  .dropload-refresh{color:#A4A4A4;}
+  body{background-color:#fff;}
+  .weui-loadmore_line{ margin:0 auto;margin-top:1.5em; font-size: 13px;}
+  .xihanomore{ display: none;}
+
+</style>
+</head>
+<body>
+<!--fenjie-->
+<div class="head-wrap">
+  <div class="page__hd choice">
+    <div class="weui-navbar xiha-ti">
+      <div class="weui-navbar__item change1 weui-bar__item_on xiha-blue1" id="showAndroidActionSheet1">我的线索<i class=""></i></div>
+      <div class="weui-navbar__item change xiha-blue" id="showAndroidActionSheet">筛选<i class=""></i></div>
+    </div>
+  </div>
+  <div class="weui-skin_android" id="androidActionsheet1" style="display: none;">
+    <div class="weui-mask1"></div>
+    <div class="weui-cells weui-cells_radio xiha">
+      <ul class="mui-table-view mui-table-view-radio">
+        <li class="mui-table-view-cell mui-selected">
+          <a class="mui-navigate-right">
+            我的线索<span>(17)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            公共线索<span>(58)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            已分配线索<span>(36)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            无效线索<span>(35)</span>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <div class="weui-skin_android" id="androidActionsheet" style="display: none;">
+    <div class="weui-mask"></div>
+    <!--线索来源 多选-->
+<form class="xihaChoice">
+  <div class="xiha-checkbox" style="border-top:1px solid #f4f4f4;">
+    <!--<i style="font-size:10px;">可多选</i>-->
+    <div class="weui-cells__title xiha ">线索来源</div>
+
+    <div class="weui-cells weui-cells_checkbox xiha-checkbox">
+      <div class="weui-grids">
+        <a href="javascript:;" class="weui-grid">
+          <div class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check " name="message"  value="1">-->
+              <input type='radio' name='message' value='1'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>发活动</p>
+            </div>
+          </div>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="2">-->
+              <input type='radio' name='message' value='2'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>预约留单</p>
+            </div>
+          </label>
+        </a>
+
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="3">-->
+              <input type='radio' name='message' value='3'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>微信咨询</p>
+            </div>
+          </label>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="4">-->
+              <input type='radio' name='message' value='4'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>400电话</p>
+            </div>
+          </label>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label " >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="5" >-->
+              <input type='radio' name='message' value='5'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>门店到访</p>
+            </div>
+          </label>
+        </a>
+      </div>
+    </div>
+
+
+  </div>
+    <!--线索来源-->
+
+    <!--性别筛选 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">性别</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>女</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox1"  value="6">-->
+                <input type='radio' name='message2' value='6'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>男</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox1"  value="6">-->
+                <input type='radio' name='message2' value='7'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--性别筛选-->
+
+
+  <!--意向深度 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">意向级别</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>高</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='8'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>中</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='9'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>低</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='10'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--意向深度-->
+
+    <!--跟进状态 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">跟进状态</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>未处理</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='11'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>已跟踪</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='12'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>已进店</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='13'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已试听</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='14'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已交定金</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='15'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已成单</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='16'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--跟进状态-->
+
+    <!--操作按钮-->
+    <div class="xiha-checkbox xiha-sure">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid cancel">
+                <p>取消</p>
+          </a>
+          <a href="javascript:;" class="weui-grid reset">
+            <p class="">
+              <input type="reset" value="重置" class="xiha-reset">
+            </p>
+          </a>
+          <a href="javascript:;" class="weui-grid sure">
+            <p>
+            <input type="button" value="确认">
+            </p>
+          </a>
+        </div>
+
+    </div>
+
+    <!--操作按钮 end-->
+</form>
+    <script>
+
+        $(function(){
+            $("input:button").click(function() {
+                text = $("input:radio[name='message']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text2 = $("input:radio[name='message2']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text3 = $("input:radio[name='message3']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text4 = $("input:radio[name='message4']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+
+                console.log('选中的值为:');
+                console.log(text);
+                console.log(text2);
+                console.log(text3);
+                console.log(text4);
+            });
+        });
+    </script>
+  </div>
+</div>
+<!--fenjie-->
+  <div class="page__bd xiha-list">
+    <div class="weui-cells xiha-content">
+
+
+      <!--这里是动态添加数据容器-->
+
+
+    </div>
+      <div class="weui-loadmore xihaloading">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载 嘻哈帮街舞...</span>
+      </div>
+      <div class="weui-loadmore weui-loadmore_line xihaup">
+        <div class="dropload-refresh">↑上拉加载更多</div>
+      </div>
+      <div class="weui-loadmore weui-loadmore_line xihanomore">
+        <span class="weui-loadmore__tips">加载完毕</span>
+      </div>
+      <!--<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot xihamore">-->
+        <!--<a href="javascript:;" class="weui-btn weui-btn_plain-primary xihamore2">点击加载更多</a>-->
+      <!--</div>-->
+  </div>
+<!--<script src="js/zepto.min.js"></script>-->
+<!--<script src="js/jquery.min.js"></script>-->
+<script src="js/jweixin-1.0.0.js"></script>
+<script src="js/weui.min.js"></script>
+<script src="js/dropload.min.js"></script>
+<!--<script src="js/xihaJSON.js"></script>-->
+<!--控制筛选-->
+<script>
+    // android
+    $(function(){
+        var $androidActionSheet = $('#androidActionsheet');
+        var $androidActionSheet1 = $('#androidActionsheet1');
+        var $androidMask = $androidActionSheet.find('.weui-mask');
+        var $androidMask1 = $androidActionSheet1.find('.weui-mask1');
+        var $change = $('.change i');
+        var $change1 = $('.change1 i');
+        var $cancel =$('.cancel');
+        var $blue = $('.xiha-blue');
+        var $blue1 = $('.xiha-blue1');
+        $('.sure').on('click',function(){
+            $androidActionSheet.fadeOut(200);
+            $blue.css('color','#CCC');
+            $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+        });
+        $("#showAndroidActionSheet").on('click', function(){  //点击筛选
+            $change.css({'border-width':'2px 0px 0px 2px','border-color':'#048ff5'});
+            $change1.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+            $blue.css('color','#048ff5');
+            $blue1.css('color','#CCC');
+            $androidActionSheet.show();
+            $androidActionSheet1.fadeOut();
+            $androidMask.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+                $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue.css('color','#CCC');
+            });
+            $cancel.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+                $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue.css('color','#CCC');
+            });
+        });
+        $("#showAndroidActionSheet1").on('click', function(){  //点击我的线索
+            $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+            $change1.css({'border-width':'2px 0px 0px 2px','border-color':'#048ff5'});
+            $blue1.css('color','#048ff5');
+            $blue.css('color','#CCC');
+            $androidActionSheet1.show();
+            $androidActionSheet.fadeOut();
+            $androidMask1.on('click',function () {
+                $androidActionSheet1.fadeOut();
+                $change1.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue1.css('color','#CCC');
+            });
+            $cancel.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+            });
+        });
+    });
+</script>
+<!--控制筛选 end-->
+<script src="js/dropload.min.js"></script>
+<script>
+$(function(){
+
+    var itemIndex = 0;
+    var tab1LoadEnd = false;
+    var xihaContent = $('.xiha-content').children().length;
+    console.log('最开始的子元素个数:');
+    console.log(xihaContent);   // 0个
+    $('.xihanomore').hide();
+
+//    if (xihaContent == 0) {
+//        if (!tab1LoadEnd) {
+//            // 解锁
+//            dropload.unlock();
+//            dropload.noData(false);
+//        } else {
+//            // 锁定
+//            dropload.lock('down');
+//            dropload.noData();
+//
+//        }
+//
+//    }
+// 重置
+//dropload.resetload();
+    var page = 0;
+    var pageF = 0;
+    var counter = 0;
+    var counterF = 0;
+    var num = 5;
+    var numF = 5;
+    var pageStart = 0,pageEnd = 0;
+    var pageStartF = 0,pageEndF = 0;
+    var dropload = $('.content').dropload({
+        scrollArea : window,
+        loadDownFn : function(me){
+            // 加载菜单一的数据
+            if(xihaContent == '0'){
+                page++;
+                $.ajax({
+//                    async: false,
+                    type: 'GET',
+                    url: 'xiha.json?page='+page,
+                    dataType: 'json',
+                    success: function(data){
+                        var resultN = '';
+                        var resultF = '';
+//                        var resultS = '';
+//                        var resultL = '';
+//                        var resultM = '';
+//                        var resultD = '';
+                        counter++;
+                        counterF++;
+                        pageEnd = num * counter;
+                        pageEndF = numF * counterF;
+                        pageStart = pageEnd - num;
+                        pageStartF = pageEndF - numF;
+                        if(pageStart <= data.listNotDeal.length){
+                            for(var i = pageStart; i < pageEnd; i++){
+                                resultN +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    +'<div class="mui-slider-right mui-disabled">'
+                                    +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    +'</div>'
+                                    +'<div class="mui-slider-handle">'
+                                    +'<div class="mui-table-cell xiha-cehua">'
+                                    +'<img src="'+data.listNotDeal[i].imgURL+'" alt="">'
+                                    +'<p>'+data.listNotDeal[i].name+'</p>'
+                                    +'<a href="'+data.listNotDeal[i].link+'" class="xiha-btn-notdeal">未处理</a>'
+                                    +'<span>剩余'+data.listNotDeal[i].desc+'天</span>'
+                                    +'</div>'
+                                    +'</div>'
+                                    +'</li>';
+
+//                                if((i + 1) >= data.listNotDeal.length){
+//                                    // 数据加载完
+//                                    tab1LoadEnd = true;
+//                                    // 锁定
+//                                    me.lock();
+//                                    // 无数据
+//                                    me.noData();
+//                                    $('.xihanomore').show();
+//                                    $('.xihaup').hide();
+//                                    break;
+//                                }
+                            }
+                            // 为了测试，延迟1秒加载
+//                            setTimeout(function(){
+//                                $('.xiha-content').append(resultN);
+//                                $('.xihaloading').hide();
+//                                //    $('.xihaup').show();
+//                                // 每次数据加载完，必须重置
+//                                me.resetload();
+//                            },1000);
+                        }
+//                      未处理加载
+
+                        if(pageStartF <= data.listFollowed.length){
+                            for(var i = pageStartF; i < pageEndF; i++){
+                                resultF +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    +'<div class="mui-slider-right mui-disabled">'
+                                    +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    +'</div>'
+                                    +'<div class="mui-slider-handle">'
+                                    +'<div class="mui-table-cell xiha-cehua">'
+                                    +'<img src="'+data.listFollowed[i].imgURL+'" alt="">'
+                                    +'<p>'+data.listFollowed[i].name+'</p>'
+                                    +'<a href="'+data.listFollowed[i].link+'" class="xiha-btn-followed">已跟踪</a>'
+                                    +'<span>剩余'+data.listFollowed[i].desc+'天</span>'
+                                    +'</div>'
+                                    +'</div>'
+                                    +'</li>';
+
+                                if((i + 1) >= data.listFollowed.length){
+                                    // 数据加载完
+                                    tab1LoadEnd = true;
+                                    // 锁定
+                                    me.lock();
+                                    // 无数据
+                                    me.noData();
+                                    $('.xihanomore').show();
+                                    $('.xihaup').hide();
+                                    break;
+                                }
+                            }
+                            // 为了测试，延迟1秒加载
+                            setTimeout(function(){
+                                $('.xiha-content').append(resultN+resultF);
+                                $('.xihaloading').hide();
+                                //    $('.xihaup').show();
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            },1000);
+                        }
+
+                    },
+                    error: function(xhr, type){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+                // 加载菜单二的数据
+            }
+        }
+    });
+
+
+
+
+
+
+
+
+});
+
+</script>
+</body>
+</html>

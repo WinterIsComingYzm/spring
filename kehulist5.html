@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>列表页-5-搜索-添加</title>
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
+<link rel="stylesheet" href="css/xiha.css"/>
+<link rel="stylesheet" type="text/css" href="css/dropload.css">
+<link rel="stylesheet" type="text/css" href="css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="css/LArea.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/LAreaData1.js"></script>
+<script src="js/LAreaData2.js"></script>
+<script src="js/LArea.js"></script>
+  <script>
+      (function () {
+          if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+              handleFontSize();
+          } else {
+              if (document.addEventListener) {
+                  document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+              } else if (document.attachEvent) {
+                  document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+                  document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+              }
+          }
+          function handleFontSize() {
+              WeixinJSBridge.invoke('setFontSizeCallback', {
+                  'fontSize': 0
+              });
+              WeixinJSBridge.on('menu:setfont', function () {
+                  WeixinJSBridge.invoke('setFontSizeCallback', {
+                      'fontSize': 0
+                  });
+              });
+          }
+      })();
+  </script>
+<style>
+  html { -webkit-text-size-adjust: none; }
+  body {
+    -webkit-text-size-adjust: 100% !important;
+  }
+  .xihaloading{
+    margin-top:25%;}
+#address{font-size:0.75rem;}
+
+  .xiha-list-img{width:20px;margin-right:5px;display:block;}
+  .dropload-refresh{color:#A4A4A4;}
+  .weui-search-bar__label{
+    padding-top:2.5%;}
+  /*.weui-cells.xiha-content li:first-child{margin-top:5px;}*/
+  .page__bd{
+    margin-top:40px;
+    height:0px;}
+  .weui-search-bar{padding:8px 0px;}
+  .weui-search-bar__box .weui-search-bar__input,.weui-search-bar__box .weui-icon-search,.weui-search-bar__cancel-btn,.weui-search-bar__box .weui-icon-clear{margin-top: 0.5em;}
+  .xiha-addlist{
+    position: fixed;
+    bottom: 4%;right:7%;
+    z-index:99999;
+    margin: 3px;
+    display: inline-block;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background-clip: padding-box;
+    padding: 10px;
+    box-shadow:5px 0 28px #ddd,0 5px 28px #ddd;
+  }
+  #xiha-addbtn span{
+    background:url("images/wow_addkehu.png");
+    position: fixed;
+    z-index:99999;
+    right: 24px;
+    bottom: 40px;
+    width: 48px;
+    height: 48px;
+    display: block;
+    background-color: rgba(62,153,255,0.9);
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 50%;
+    box-shadow: 0 10px 10px 0 rgba(38, 149, 255, 0.2);
+  }
+
+  a,a:hover, a:focus{text-decoration: none;}
+.xiha-alert{
+  bottom: 0;right:0;position:relative;z-index: 999999;display: none;border-radius: 0px;
+}
+  .mui-bar-nav~.mui-content{padding-top:32px;}
+  .weui-search-bar__cancel-btn{
+    font-size: 0.8em;}
+  .xiha-source{
+    border:1px solid #dddddc!important;
+    padding-right: 14px;
+    border-radius: 5px;
+    color: #0d0d0d;
+    line-height: 26px;
+    margin-bottom: 0px;
+    margin-left:13px;
+    width: 92%;
+    height:38px;
+    line-height: 16px;
+  }
+  .xiha-addlist .weui-cell__hd label {
+    text-align: right;
+    width:79px;
+
+  }
+  .xiha-addlist .weui-cell{
+    font-size: 0.75rem;
+    padding:2px 13px;
+  }
+  .xiha-addlist .weui-cell .weui-vcode-btn{height:40px;line-height:40px;}
+  .xiha-addlist .weui-cell_switch{height:44px;line-height:40px;}
+  .weui-cell.weui-cell-xihasource{height:44px!important;}
+
+  /*.beizhu label{*/
+    /*top: -33px;*/
+    /*position: relative;*/
+/*}*/
+  /*input:hover{*/
+    /*-webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;*/
+    /*border-color:rgba(4,181,2,.55);*/
+    /*-webkit-box-shadow:0 0 1px rgba(4,181,2,3);*/
+    /*border-radius: 5px;*/
+  /*}*/
+  .mui-content-padded.saveBtn{margin:0px;}
+  .nav-group.xiha-list-item li{padding:5px;}
+  .weui-search-bar__form.xiha-search-form{z-index:99; border-bottom: 1px solid #E5E5E5;height:43px;}
+</style>
+</head>
+<body>
+
+<a class="" id="xiha-addbtn" ><span class=""></span></a>
+<div class="xiha-addlist xiha-alert">
+
+  <!--{php define('MUI', true);}-->
+  <!--{template 'common/mheader'}-->
+  <header class="mui-bar mui-bar-nav">
+    <a href="{php echo $this->createMobileUrl('crmhome');}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">新增客户</h1>
+  </header>
+  <div class="mui-content mc-profile">
+    <form class="tab-content clearfix js-ajax-form {if $_W['container'] !== 'wechat'}profile-form{/if}" action="{url 'mc/profile/editprofile'}" method="post" enctype="multipart/form-data">
+      <!--{php echo tpl_app_form_field_avatar('avatar', $profile['avatar']);}-->
+      <div class="mui-input-group mui-mt15">
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">姓名*</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  placeholder="请输入姓名" name="realname" id="xihaname">
+          </div>
+          <!--{php echo tpl_app_fans_form('realname', $profile['realname'], 姓名);}-->
+        </div>
+        <div class="weui-cell weui-cell_vcode">
+          <div class="weui-cell__hd">
+            <label class="weui-label">手机号*</label>
+          </div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="tel" placeholder="请输入手机号" name="mobile" id="xihatel">
+          </div>
+          <div class="weui-cell__ft">
+            <button class="weui-vcode-btn">获取验证码</button>
+          </div>
+          <!--{php echo tpl_app_fans_form('mobile', $profile['mobile'], 手机号);}-->
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">QQ</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入QQ号" name="qq" id="xihaqq">
+          </div>
+          <!--{php echo tpl_app_fans_form('qq', $profile['qq'], QQ);}-->
+        </div>
+
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">微信</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  placeholder="微信号" name="weixin" id="xihaweixin">
+          </div>
+          <!--{php echo tpl_app_fans_form('weixin', $profile['weixin'], 微信);}-->
+        </div>
+
+        <!--<div class="weui-cell">-->
+          <!--<div class="weui-cell__hd"><label class="weui-label">性别</label></div>-->
+          <!--<div class="weui-cell__bd">-->
+            <!--<select class="weui-select" name="select1">-->
+              <!--<option selected="" value="1">男</option>-->
+              <!--<option value="2">女</option>-->
+              <!--<option value="3">中性</option>-->
+            <!--</select>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;{php echo tpl_app_fans_form('gender', $profile['gender'], 性别);}	&ndash;&gt;-->
+        <!--</div>-->
+
+        <div class="weui-cell weui-cell_switch">
+          <div class="weui-cell__bd">男</div>
+          <div class="weui-cell__ft">
+            <label for="switchCP" class="weui-switch-cp">
+              <input id="switchCPboy" class="weui-switch-cp__input gender" type="checkbox" checked="checked" name="gender" value="boy">
+              <div class="weui-switch-cp__box"></div>
+            </label>
+          </div>
+          <div class="weui-cell__bd">女</div>
+          <div class="weui-cell__ft">
+            <label for="switchCP" class="weui-switch-cp">
+              <input id="switchCPgirl" class="weui-switch-cp__input gender" type="checkbox" name="gender" value="girl">
+              <div class="weui-switch-cp__box"></div>
+            </label>
+          </div>
+          <!--{php echo tpl_app_fans_form('gender', $profile['gender'], 性别);}	-->
+        </div>
+        <script>
+            //判断用户选中状态与切换
+          $(function(){
+              //默认选项男
+              var switchCPgirl = $('#switchCPgirl');
+              var switchCPboy = $('#switchCPboy');
+              switchCPgirl.click(function(){
+                  var switchCPstatusG = switchCPgirl.is(':checked');
+                  if(switchCPstatusG){
+                      $("#switchCPboy").attr("checked",false);
+                  };
+              });
+              switchCPboy.click(function(){
+                  var switchCPstatusG = switchCPgirl.is(':checked');
+                  if(switchCPstatusG){
+                      $("#switchCPgirl").attr("checked",false);
+                  };
+              });
+          });
+        </script>
+
+
+
+
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label for="" class="weui-label">出生日期*</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="date" value="" placeholder="点击选择" id="birthday">
+          </div>
+          <!--{php echo tpl_app_fans_form('birth', array('year' => $profile['birthyear'], 'month' => $profile['birthmonth'], 'day' => $profile['birthday']), 出生日期);}-->
+        </div>
+        <!--<div class="mui-input-row">-->
+          <!--<label>客户来源*</label>-->
+          <!--<input class="mui-source-picker" type="text" value="" readonly="" placeholder="请选择来源">-->
+          <!--<input type="hidden" name="source" value="">-->
+          <!--<script type="text/javascript">-->
+          <!--$(".mui-source-picker").on("tap", function(){-->
+          <!--var $this = $(this);-->
+          <!--util.poppicker({data: [{"text":"转介绍","value":"转介绍"},{"text":"自然到访","value":"自然到访"},{"text":"口碑传播","value":"口碑传播"},{"text":"商家合作","value":"商家合作"},{"text":"外展活动","value":"外展活动"},{"text":"团购","value":"团购"},{"text":"教育宝","value":"教育宝"},{"text":"其他","value":"其他"},{"text":"网络平台","value":"网络平台"}]}, function(items){-->
+          <!--$this.val(items[0].text).next().val(items[0].value);-->
+          <!--});-->
+          <!--});-->
+          <!--</script>	-->
+        <!--</div>-->
+
+
+
+        <div class="weui-cell weui-cell-xihasource">
+          <div class="weui-cell__hd"><label class="weui-label">客户来源*</label></div>
+          <div class="weui-cell__bd">
+            <i class="weui-icon-success" style="position: absolute;top:27%; right:7%;"></i>
+            <select class="weui-select xiha-source" name="source" id="kehuSource" >
+              <option selected="" value="0">教育宝</option>
+              <option value="1">转介绍</option>
+              <option value="2">自然到访</option>
+              <option value="3">口碑传播</option>
+              <option value="4">商家合作</option>
+              <option value="5">外展活动</option>
+            </select>
+          </div>
+        </div>
+
+
+        <!--<div class="weui-cell">-->
+          <!--<div class="weui-cell__hd"><label class="weui-label">所在地区:</label></div>-->
+          <!--<div class="weui-cell__bd">-->
+            <!--<input class="weui-input" type="text"  placeholder="所在地区">-->
+          <!--</div>-->
+          <!--&lt;!&ndash;{php echo tpl_app_fans_form('reside', array('province' => $profile['province'], 'city' => $profile['city'], 'district' => $profile['dist']), 所在地区);}&ndash;&gt;-->
+        <!--</div>-->
+
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">所在地区*</label></div>
+          <div class="weui-cell__bd">
+              <input id="address" type="text" readonly="" placeholder="城市选择"  value="广东省-深圳市-南山区">
+              <input id="addressNumber" type="hidden" value="20-234-504">
+          </div>
+            <!--{php echo tpl_app_fans_form('reside', array('province' => $profile['province'], 'city' => $profile['city'], 'district' => $profile['dist']), 所在地区);}-->
+        </div>
+
+
+
+
+
+
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">地址:</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  placeholder="请输入具体街道名" id="xihaaddress">
+          </div>
+          <!--{php echo tpl_app_fans_form('address', $profile['address'], 地址);}-->
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">联系人:</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  placeholder="联系人" id="xihaconnect">
+          </div>
+          <!--{php echo tpl_app_fans_form('emecontact', $profile['emecontact'], 联系人);}-->
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__hd"><label class="weui-label">联系人电话:</label></div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" type="tel"  placeholder="联系人电话" id="xihaconnectTel" pattern="">
+          </div>
+          <!--{php echo tpl_app_fans_form('ememobile', $profile['ememobile'], 联系人电话);}-->
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__hd beizhu"><label class="weui-label">备注信息:</label></div>
+          <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="相关备注文本" rows="3" id="xiharemarks"></textarea>
+            <div class="weui-textarea-counter"><span>0</span>/200</div>
+          </div>
+          <!--{php echo tpl_app_fans_form('remarks', $profile['remarks'], 备注信息);}-->
+        </div>
+      </div>
+      <div class="mui-content-padded saveBtn">
+        <button id="addbtn" class="mui-btn mui-btn-success mui-btn-block" type="button" name="button" value="提交">保存</button>
+        <input type="hidden" name="token" value="{$_W['token']}" />
+      </div>
+    </form>
+  </div>
+  <div class="js-quickmenu nav-menu-app has-nav-0  has-nav-4" style="background-color: rgb(244, 244, 244);">
+    <ul class="nav-group clearfix xiha-list-item">
+      <li class="nav-group-item">
+        <!--<a href="{php echo $this->createMobileUrl('crmkhlist');}" style="background-position:center 2px"><i class="fa fa-users" style="color: rgb(150,150,150);"></i><span style="color:rgb(150,150,150);">列表</span></a>-->
+        <a href="kehulist5.html" style="background-position:center 2px"><i class="fa fa-users" style="color: rgb(150,150,150);"></i><span style="color:rgb(150,150,150);">列表</span></a>
+      </li>
+      <li class="nav-group-item">
+        <a href="{php echo $this->createMobileUrl('crmzhuanyi');}" style="background-position:center 2px"><i class="fa fa-sign-out" style="color: rgb(150,150,150);"></i><span style="color:rgb(150,150,150);">转移</span></a>
+      </li>
+      <li class="nav-group-item">
+        <a href="{php echo $this->createMobileUrl('crmgenzong');}" style="background-position:center 2px"><i class="fa fa-send" style="color:rgb(150,150,150);"></i><span style="color:rgb(150,150,150);">跟踪</span></a>
+      </li>
+      <li class="nav-group-item"><a href="{php echo $this->createMobileUrl('crmhome');}" style="background-position:center 2px"><i class="fa fa-user" style="color:rgb(150,150,150);"></i><span style="color:rgb(150,150,150);">首页</span></a>
+      </li>
+    </ul></div>
+  <script type="text/javascript">
+      $("#addbtn").click(function(){
+          var msg = '请填写必填项';
+          if($('form').find('input[name="realname"]').val() == ''){
+              mui.alert(msg+'姓名');
+          }
+          else if($('form').find('input[name="gender"]').val() == ''){
+              mui.alert(msg+'性别');
+          }
+          else if($('form').find('input[name="birth[year]"]').val() == ''){
+              mui.alert(msg+'生日年份');
+          }
+          else if($('form').find('input[name="birth[month]"]').val() == ''){
+              mui.alert(msg+'生日月份');
+          }
+          else if($('form').find('input[name="birth[day]"]').val() == ''){
+              mui.alert(msg+'生日日');
+          }
+          else if($('form').find('input[name="reside[province]"]').val() == ''){
+              mui.alert(msg+'{$titles['reside']}'+"省份");
+          }
+          else if($('form').find('input[name="reside[city]"]').val() == ''){
+              mui.alert(msg+'{$titles['reside']}'+"市");
+          }
+          else if($('form').find('input[name="reside[district]"]').val() == ''){
+              mui.alert(msg+'{$titles['reside']}'+"县区");
+          }
+          else if($('form').find('input[name="address"]').val() == ''){
+              mui.alert(msg+'详细地址');
+          }
+          else if($('form').find('input[name="mobile"]').val() == ''){
+              mui.alert(msg+'手机号');
+          }
+          else if($('form').find('input[name="qq"]').val() == ''){
+              mui.alert(msg+'QQ');
+          }
+          else if($('form').find('input[name="weixin"]').val() == ''){
+              mui.alert(msg+'微信号');
+          }
+          else {
+              var url = '{php echo $this->createmobileUrl('crmkhadd');}';
+              $.ajax({
+                  type:'post',
+                  url:'{php echo $this->createmobileUrl('crmkhadd');}',
+                  data:{'realname':$('form').find('input[name="realname"]').val(),'mobile':$('form').find('input[name="mobile"]').val(),'avatar':$('form').find('input[name="avatar"]').val(),'qq':$('form').find('input[name="qq"]').val(),'weixin':$('form').find('input[name="weixin"]').val(),'gender':$('form').find('input[name="gender"]').val(),'birthday':$('form').find('input[name="birthday"]').val(),'source':$('form').find('input[name="source"]').val(),'reside':$('form').find('input[name="reside"]').val(),'gender':$('form').find('input[name="gender"]').val(),'gender':$('form').find('input[name="gender"]').val()},
+                  success:function(data){
+                      var data=eval("("+data+")");
+                      if(data.code=200){
+                          layer.closeAll('loading');
+                          $('#addModal').modal('hide');
+                          $('#jihua'+jgjihuaid).empty();
+                          $('#jihua'+jgjihuaid).removeClass("panel-danger");
+                          $('#jihua'+jgjihuaid).addClass("panel-primary");
+                          $html='<div class="panel-heading">已执行 【'+data.jihua.xqname+data.jihua.username+'计划'+data.jihua.zxrq+' '+data.jihua.leixing+data.jihua.uname+'】</div><div class="panel-body"><h3>计划内容:</h3><p class="text-danger">'+data.jihua.rznr+'</p><h3>执行结果:</h3><p class="text-info">'+data.jihua.jieguo+'</p></div><div class="panel-footer">创建时间：'+data.jihua.czrq+' <span class="text-info pull-right">执行时间：'+data.jihua.jgrq+'</span></div>';
+                          $('#jihua'+jgjihuaid).append($html);
+                          layer.msg("计划执行成功!");
+                      }
+                  }
+              });
+
+          }
+      });
+  </script>
+  <!--<script type="text/javascript">-->
+  <!--wx.config(jssdkconfig);-->
+  <!--wx.ready(function () {-->
+  <!--wx.hideOptionMenu();-->
+  <!--});-->
+  <!--</script>-->
+  <!--{template 'common/mfooter'}-->
+
+
+</div>
+
+
+<!--fenjie-->
+<div class="head-wrap">
+  <div class="page__hd choice">
+    <div class="weui-navbar xiha-ti">
+      <div class="weui-navbar__item change1 weui-bar__item_on xiha-blue1" id="showAndroidActionSheet1">我的线索<i class=""></i></div>
+      <div class="weui-navbar__item change xiha-blue" id="showAndroidActionSheet">筛选<i class=""></i></div>
+    </div>
+  </div>
+  <div class="weui-skin_android" id="androidActionsheet1" style="display: none;">
+    <div class="weui-mask1"></div>
+    <div class="weui-cells weui-cells_radio xiha">
+      <ul class="mui-table-view mui-table-view-radio myClues" id="myClues">
+        <li class="mui-table-view-cell mui-selected">
+          <a class="mui-navigate-right">
+            我的线索<span>(17)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            公共线索<span>(58)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            已分配线索<span>(36)</span>
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            无效线索<span>(35)</span>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+  <!--获取当前的值-->
+  <script>
+    //我的线索的索引值
+    $(function(){
+        var myClues = $('.myClues li');
+        myClues.click(function(){
+
+            if($(this).hasClass('mui-selected')){
+
+                var myCluesIndex = $(this).index();
+                console.log(myCluesIndex);
+
+            };
+        });
+    });
+
+  </script>
+
+
+
+  <div class="weui-skin_android" id="androidActionsheet" style="display: none;">
+    <div class="weui-mask"></div>
+    <!--线索来源 多选-->
+<form class="xihaChoice">
+  <div class="xiha-checkbox" style="border-top:1px solid #f4f4f4;">
+    <!--<i style="font-size:10px;">可多选</i>-->
+    <div class="weui-cells__title xiha ">线索来源</div>
+
+    <div class="weui-cells weui-cells_checkbox xiha-checkbox">
+      <div class="weui-grids">
+        <a href="javascript:;" class="weui-grid">
+          <div class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check " name="message"  value="1">-->
+              <input type='radio' name='message' value='1'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>发活动</p>
+            </div>
+          </div>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="2">-->
+              <input type='radio' name='message' value='2'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>预约留单</p>
+            </div>
+          </label>
+        </a>
+
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="3">-->
+              <input type='radio' name='message' value='3'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>微信咨询</p>
+            </div>
+          </label>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label" >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="4">-->
+              <input type='radio' name='message' value='4'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>400电话</p>
+            </div>
+          </label>
+        </a>
+        <a href="javascript:;" class="weui-grid">
+          <label class="weui-cell weui-check__label " >
+            <div class="weui-cell__hd checkboxFour">
+              <!--<input type="radio" class="weui-check" name="checkbox0"  value="5" >-->
+              <input type='radio' name='message' value='5'/>
+              <label for="checkboxFourInput"></label>
+              <!--<i class="weui-icon-checked"></i>-->
+            </div>
+            <div class="weui-cell__bd">
+              <p>门店到访</p>
+            </div>
+          </label>
+        </a>
+      </div>
+    </div>
+
+
+  </div>
+    <!--线索来源-->
+
+    <!--性别筛选 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">性别</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>女</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox1"  value="6">-->
+                <input type='radio' name='message2' value='6'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>男</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox1"  value="6">-->
+                <input type='radio' name='message2' value='7'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--性别筛选-->
+
+  <!--意向深度 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">意向级别</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>高</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='8'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>中</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='9'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>低</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox2"  value="8">-->
+                <input type='radio' name='message3' value='10'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--意向深度-->
+
+    <!--跟进状态 单选-->
+    <div class="xiha-checkbox">
+
+      <div class="weui-cells__title xiha ">跟进状态</div>
+      <div class="weui-cells weui-cells_radio xiha-checkbox ">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>未处理</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='11'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>已跟踪</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='12'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label" >
+              <div class="weui-cell__bd">
+                <p>已进店</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='13'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已试听</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='14'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已交定金</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='15'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+          <a href="javascript:;" class="weui-grid">
+            <label class="weui-cell weui-check__label">
+              <div class="weui-cell__bd">
+                <p>已成单</p>
+              </div>
+              <div class="weui-cell__ft checkboxFour">
+                <!--<input type="radio" class="weui-check" name="checkbox3">-->
+                <input type='radio' name='message4' value='16'/>
+                <label for="checkboxFourInput"></label>
+                <!--<span class="weui-icon-checked"></span>-->
+              </div>
+            </label>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!--跟进状态-->
+
+    <!--操作按钮-->
+    <div class="xiha-checkbox xiha-sure">
+        <div class="weui-grids">
+          <a href="javascript:;" class="weui-grid cancel">
+                <p>取消</p>
+          </a>
+          <a href="javascript:;" class="weui-grid reset">
+            <p class="">
+              <input type="reset" value="重置" class="xiha-reset">
+            </p>
+          </a>
+          <a href="javascript:;" class="weui-grid sure">
+            <p>
+            <input type="button" value="确认">
+            </p>
+          </a>
+        </div>
+
+    </div>
+
+    <!--操作按钮 end-->
+</form>
+    <script>
+        $(function(){
+            $("input:button").click(function() {
+                text = $("input:radio[name='message']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text2 = $("input:radio[name='message2']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text3 = $("input:radio[name='message3']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+                text4 = $("input:radio[name='message4']:checked").map(function(index,elem) {
+                    return $(elem).val();
+                }).get().join(',');
+
+                console.log('选中的值为:');
+                console.log(text);
+                console.log(text2);
+                console.log(text3);
+                console.log(text4);
+            });
+        });
+    </script>
+  </div>
+
+</div>
+<!--fenjie-->
+<!--搜索-->
+
+  <div class="page__bd xiha-searchBtn">
+    <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
+    <div class="weui-search-bar" id="searchBar">
+      <form class="weui-search-bar__form xiha-search-form">
+        <div class="weui-search-bar__box">
+          <i class="weui-icon-search"></i>
+          <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+          <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+        </div>
+        <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+          <i class="weui-icon-search"></i>
+          <span>搜索</span>
+        </label>
+      </form>
+      <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+    </div>
+    <!--<div class="weui-cells searchbar-result" id="searchResult" style="display: none;">-->
+      <!--<div class="weui-cell weui-cell_access">-->
+        <!--<div class="weui-cell__bd weui-cell_primary">-->
+          <!--<p>实时搜索文本</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="weui-cell weui-cell_access">-->
+        <!--<div class="weui-cell__bd weui-cell_primary">-->
+          <!--<p>实时搜索文本</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="weui-cell weui-cell_access">-->
+        <!--<div class="weui-cell__bd weui-cell_primary">-->
+          <!--<p>实时搜索文本</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="weui-cell weui-cell_access">-->
+        <!--<div class="weui-cell__bd weui-cell_primary">-->
+          <!--<p>实时搜索文本</p>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  </div>
+
+
+
+
+
+
+
+  <div class="page__bd xiha-list">
+    <div class="weui-cells xiha-content">
+      <!--这里是动态添加数据容器-->
+    </div>
+      <div class="weui-loadmore xihaloading">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+      </div>
+      <div class="weui-loadmore weui-loadmore_line xihanomore">
+        <span class="weui-loadmore__tips">暂无数据</span>
+      </div>
+  </div>
+<!--<script src="js/zepto.min.js"></script>-->
+<!--<script src="js/jquery.min.js"></script>-->
+<script src="js/jweixin-1.0.0.js"></script>
+<script src="js/weui.min.js"></script>
+<script src="js/dropload.min.js"></script>
+<!--<script src="js/xihaJSON.js"></script>-->
+<!--控制筛选-->
+<!--客户出生日期初始值和取值设置-->
+<script>
+
+    $(function(){
+
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+//        alert(today);
+        $('#birthday').val(today);
+
+    });
+
+</script>
+<!--客户出生日期初始值和取值设置 end-->
+
+
+<script>
+    $(function(){
+        var $androidActionSheet = $('#androidActionsheet');
+        var $androidActionSheet1 = $('#androidActionsheet1');
+        var $androidMask = $androidActionSheet.find('.weui-mask');
+        var $androidMask1 = $androidActionSheet1.find('.weui-mask1');
+        var $change = $('.change i');
+        var $change1 = $('.change1 i');
+        var $cancel =$('.cancel');
+        var $blue = $('.xiha-blue');
+        var $blue1 = $('.xiha-blue1');
+        $('.sure').on('click',function(){
+            $androidActionSheet.fadeOut(200);
+            $blue.css('color','#CCC');
+            $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+        });
+        $("#showAndroidActionSheet").on('click', function(){  //点击筛选
+            $change.css({'border-width':'2px 0px 0px 2px','border-color':'#048ff5'});
+            $change1.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+            $blue.css('color','#048ff5');
+            $blue1.css('color','#CCC');
+            $androidActionSheet.show();
+            $androidActionSheet1.fadeOut();
+            $androidMask.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+                $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue.css('color','#CCC');
+            });
+            $cancel.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+                $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue.css('color','#CCC');
+            });
+        });
+        $("#showAndroidActionSheet1").on('click', function(){  //点击我的线索
+            $change.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+            $change1.css({'border-width':'2px 0px 0px 2px','border-color':'#048ff5'});
+            $blue1.css('color','#048ff5');
+            $blue.css('color','#CCC');
+            $androidActionSheet1.show();
+            $androidActionSheet.fadeOut();
+            $androidMask1.on('click',function () {
+                $androidActionSheet1.fadeOut();
+                $change1.css({'border-width':'0px 2px 2px 0px','border-color':'#C8C8CD'});
+                $blue1.css('color','#CCC');
+            });
+            $cancel.on('click',function () {
+                $androidActionSheet.fadeOut(200);
+            });
+        });
+    });
+</script>
+<!--控制筛选 end-->
+<script>
+$(function(){
+    var page=0, pagechoice=0,source=0, sex=0, want=0, status=0;
+    var xihaContent = $('.xiha-content').children().length;
+    console.log('最开始的子元素个数:');
+    console.log(xihaContent);
+    if(xihaContent == 0){
+            var resultN = '';
+            var resultF = '';
+            var resultS = '';
+            var resultL = '';
+            var resultM = '';
+            var resultD = '';
+            page++;
+            $.ajax({
+                type: 'GET',
+                url:'xiha.json?page='+page,
+                dataType: 'json',
+                success: function(data){
+                    var arrLen = data.listDeal.length;
+                    console.log('已成交的个数:');
+                    console.log(arrLen);
+                    //获取已成交的的个数，非负数
+                    if(arrLen >= 0){
+                        for(var i = 0; i < data.listNotDeal.length; i++){
+                            resultN +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listNotDeal[i].imgURL+'" alt="">'
+                                +'<p>'+data.listNotDeal[i].name+'</p>'
+                                +'<a href="'+data.listNotDeal[i].link+'" class="xiha-btn-notdeal">未处理</a>'
+                                +'<span>剩余'+data.listNotDeal[i].desc+'天</span>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        for(var i = 0; i < data.listFollowed.length; i++){
+                            resultF +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listFollowed[i].imgURL+'" alt="">'
+                                +'<p>'+data.listFollowed[i].name+'</p>'
+                                +'<a href="'+data.listFollowed[i].link+'" class="xiha-btn-followed">已跟踪</a>'
+                                +'<span>剩余'+data.listFollowed[i].desc+'天</span>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        for(var i = 0; i < data.listStored.length; i++){
+                            resultS +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listStored[i].imgURL+'" alt="">'
+                                +'<p>'+data.listStored[i].name+'</p>'
+                                +'<a href="'+data.listStored[i].link+'" class="xiha-btn-stored">已进店</a>'
+                                +'<span>剩余'+data.listStored[i].desc+'天</span>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        for(var i = 0; i < data.listListened.length; i++){
+                            resultL +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listListened[i].imgURL+'" alt="">'
+                                +'<p>'+data.listListened[i].name+'</p>'
+                                +'<a href="'+data.listListened[i].link+'" class="xiha-btn-listened">已听课</a>'
+                                +'<span>剩余'+data.listListened[i].desc+'天</span>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        for(var i = 0; i < data.listMoneypart.length; i++){
+                            resultM +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listMoneypart[i].imgURL+'" alt="">'
+                                +'<p>'+data.listMoneypart[i].name+'</p>'
+                                +'<a href="'+data.listMoneypart[i].link+'" class="xiha-btn-moneypart">已交定金</a>'
+                                +'<span>剩余尾款'+data.listMoneypart[i].desc+'元</span>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        for(var i = 0; i < data.listDeal.length; i++){
+                            resultD +=   '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                +'<div class="mui-slider-right mui-disabled">'
+                                +'<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                +'<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                +'<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                +'<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                +'</div>'
+                                +'<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                                +'<div class="mui-table-cell xiha-cehua">'
+                                +'<img src="'+data.listDeal[i].imgURL+'" alt="">'
+                                +'<p>'+data.listDeal[i].name+'</p>'
+                                +'<a href="'+data.listDeal[i].link+'" class="xiha-btn-deal">已处理</a>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>';
+                        }
+                        // 如果没有数据
+                    }else{
+                        // 锁定
+                        me.lock();
+                        // 无数据
+                        me.noData();
+                    }
+                    setTimeout(function(){
+                        // 插入数据到页面，放到最后面
+                        $('.xiha-content').append(resultN+resultF+resultS+resultL+resultM+resultD);
+                        $('.xihaloading').hide();
+                        $('.xihanomore').hide();
+                        var howmuch = $('.xiha-content').children().length;
+                        console.log('下面是第一次加载个数:');
+                        console.log(howmuch);
+                        // 每次数据插入，必须重置
+                        //  me.resetload();
+                    },400);
+                },
+                error: function(xhr, type){
+                    alert('这个位置进入报的错');
+                    // 即使加载出错，也得重置
+                    // me.resetload();
+                }
+            });
+      //第一次加载后获取加载个数
+    }
+      //第一次到这里
+        //筛选
+        $('input:button').click(function () {
+            source = $("input:radio[name='message']:checked").map(function (index, elem) {
+                return $(elem).val();
+            }).get().join(',');
+            sex = $("input:radio[name='message2']:checked").map(function (index, elem) {
+                return $(elem).val();
+            }).get().join(',');
+            want = $("input:radio[name='message3']:checked").map(function (index, elem) {
+                return $(elem).val();
+            }).get().join(',');
+            status = $("input:radio[name='message4']:checked").map(function (index, elem) {
+                return $(elem).val();
+            }).get().join(',');
+            $('.weui-cells.xiha-content').empty();
+            pagechoice++
+            $.ajax({
+                type: 'POST',
+                url: 'xiha.json?page=' + pagechoice,
+                dataType: 'json',
+                data: {source: source, sex: sex, want: want, status: status},
+                success: function (data) {
+                    var resultN = '';
+                    var resultF = '';
+                    var resultS = '';
+                    var resultL = '';
+                    var resultM = '';
+                    var resultD = '';
+                    for (var i = 0; i < data.listNotDeal.length; i++) {
+                        resultN += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listNotDeal[i].imgURL + '" alt="">'
+                            + '<p>' + data.listNotDeal[i].name + '</p>'
+                            + '<a href="' + data.listNotDeal[i].link + '" class="xiha-btn-notdeal">未处理</a>'
+                            + '<span>剩余' + data.listNotDeal[i].desc + '天</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    for (var i = 0; i < data.listFollowed.length; i++) {
+                        resultF += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listFollowed[i].imgURL + '" alt="">'
+                            + '<p>' + data.listFollowed[i].name + '</p>'
+                            + '<a href="' + data.listFollowed[i].link + '" class="xiha-btn-followed">已跟踪</a>'
+                            + '<span>剩余' + data.listFollowed[i].desc + '天</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    for (var i = 0; i < data.listStored.length; i++) {
+                        resultS += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listStored[i].imgURL + '" alt="">'
+                            + '<p>' + data.listStored[i].name + '</p>'
+                            + '<a href="' + data.listStored[i].link + '" class="xiha-btn-stored">已进店</a>'
+                            + '<span>剩余' + data.listStored[i].desc + '天</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    for (var i = 0; i < data.listListened.length; i++) {
+                        resultL += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listListened[i].imgURL + '" alt="">'
+                            + '<p>' + data.listListened[i].name + '</p>'
+                            + '<a href="' + data.listListened[i].link + '" class="xiha-btn-listened">已听课</a>'
+                            + '<span>剩余' + data.listListened[i].desc + '天</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    for (var i = 0; i < data.listMoneypart.length; i++) {
+                        resultM += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listMoneypart[i].imgURL + '" alt="">'
+                            + '<p>' + data.listMoneypart[i].name + '</p>'
+                            + '<a href="' + data.listMoneypart[i].link + '" class="xiha-btn-moneypart">已交定金</a>'
+                            + '<span>剩余尾款' + data.listMoneypart[i].desc + '元</span>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    for (var i = 0; i < data.listDeal.length; i++) {
+                        resultD += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                            + '<div class="mui-slider-right mui-disabled">'
+                            + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                            + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                            + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                            + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                            + '</div>'
+                            + '<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                            + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                            + '<img src="' + data.listDeal[i].imgURL + '" alt="">'
+                            + '<p>' + data.listDeal[i].name + '</p>'
+                            + '<a href="' + data.listDeal[i].link + '" class="xiha-btn-deal">已处理</a>'
+                            + '</div>'
+                            + '</div>'
+                            + '</li>';
+                    }
+                    setTimeout(function () {
+                        // 插入数据到页面，放到最后面
+//                    $('.dropload-down').remove();
+                        $('.weui-cells.xiha-content').append(resultN + resultF + resultS + resultL + resultM + resultD);
+                        // 每次数据插入，必须重置
+                        //me.resetload();
+                    }, 500);
+                },
+                error: function (xhr, type) {
+                    alert('ajax出错');
+                    // 即使加载出错，也得重置
+                    me.resetload();
+                }
+
+            })
+        });
+        //筛选
+        $('.xiha-list').dropload({
+            scrollArea: window,
+            loadDownFn: function (me) {
+                page++;
+                // 拼接HTML
+                var resultD = '';
+                var resultN = '';
+                var resultF = '';
+                var resultS = '';
+                var resultM = '';
+                var resultL = '';
+                $.ajax({
+                    type: 'GET',
+                    url: 'xiha.json?page=' + page,
+                    dataType: 'json',
+                    success: function (data) {
+                        var arrLen = data.listDeal.length;
+                        if (arrLen > 0) {
+                            for (var i = 0; i < data.listDeal.length; i++) {
+                                resultD += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listDeal[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listDeal[i].name + '</p>'
+                                    + '<a href="' + data.listDeal[i].link + '" class="xiha-btn-deal">已处理</a>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+                            for (var i = 0; i < data.listNotDeal.length; i++) {
+                                resultN += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listNotDeal[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listNotDeal[i].name + '</p>'
+                                    + '<a href="' + data.listNotDeal[i].link + '" class="xiha-btn-notdeal">未处理</a>'
+                                    + '<span>剩余' + data.listNotDeal[i].desc + '天</span>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+                            for (var i = 0; i < data.listFollowed.length; i++) {
+                                resultF += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listFollowed[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listFollowed[i].name + '</p>'
+                                    + '<a href="' + data.listFollowed[i].link + '" class="xiha-btn-followed">已跟踪</a>'
+                                    + '<span>剩余' + data.listFollowed[i].desc + '天</span>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+                            for (var i = 0; i < data.listStored.length; i++) {
+                                resultS += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listStored[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listStored[i].name + '</p>'
+                                    + '<a href="' + data.listStored[i].link + '" class="xiha-btn-stored">已进店</a>'
+                                    + '<span>剩余' + data.listStored[i].desc + '天</span>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+                            for (var i = 0; i < data.listListened.length; i++) {
+                                resultL += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listListened[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listListened[i].name + '</p>'
+                                    + '<a href="' + data.listListened[i].link + '" class="xiha-btn-listened">已听课</a>'
+                                    + '<span>剩余' + data.listListened[i].desc + '天</span>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+                            for (var i = 0; i < data.listMoneypart.length; i++) {
+                                resultM += '<li class="mui-table-view-cell mui-transitioning xiha-li">'
+                                    + '<div class="mui-slider-right mui-disabled">'
+                                    + '<a class="mui-btn mui-btn-success mui-icon mui-icon-phone"></a>'
+                                    + '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-compose"></a>'
+                                    + '<a class="mui-btn mui-btn-red mui-icon mui-icon-gear"></a>'
+                                    + '<a class="mui-btn mui-btn-royal mui-icon mui-icon-trash"></a>'
+                                    + '</div>'
+                                    + '<div class="mui-slider-handle" style="transform: translate(0px, 0px);">'
+                                    + '<div class="mui-table-cell xiha-cehua xiha-notdeal">'
+                                    + '<img src="' + data.listMoneypart[i].imgURL + '" alt="">'
+                                    + '<p>' + data.listMoneypart[i].name + '</p>'
+                                    + '<a href="' + data.listMoneypart[i].link + '" class="xiha-btn-moneypart">已交定金</a>'
+                                    + '<span>剩余尾款' + data.listMoneypart[i].desc + '元</span>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '</li>';
+                            }
+
+                            // 如果没有数据
+                        } else {
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            // 插入数据到页面，放到最后面
+                            $('.xiha-content').append(resultN + resultF + resultS + resultL + resultM + resultD);
+                            // 每次数据插入，必须重置
+                            me.resetload();
+                        }, 600);
+                    },
+                    error: function (xhr, type) {
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+});
+
+</script>
+<!--页面顶部 搜索框 按钮相关-->
+<script type="text/javascript" class="searchbar js_show">
+    $(function(){
+        var $searchBar = $('#searchBar'),
+            $searchResult = $('#searchResult'),
+            $searchText = $('#searchText'),
+            $searchInput = $('#searchInput'),
+            $searchClear = $('#searchClear'),
+            $searchCancel = $('#searchCancel');
+        function hideSearchResult(){
+            $searchResult.hide();
+            $searchInput.val('');
+        }
+        function cancelSearch(){
+            hideSearchResult();
+            $searchBar.removeClass('weui-search-bar_focusing');
+            $searchText.show();
+        }
+        $searchText.on('click', function(){
+            $searchBar.addClass('weui-search-bar_focusing');
+            $searchInput.focus();
+        });
+        $searchInput
+            .on('blur', function () {
+                if(!this.value.length) cancelSearch();
+            })
+            .on('input', function(){
+                if(this.value.length) {
+                    $searchResult.show();
+                } else {
+                    $searchResult.hide();
+                }
+            })
+        ;
+        $searchClear.on('click', function(){
+            hideSearchResult();
+            $searchInput.focus();
+        });
+        $searchCancel.on('click', function(){
+            cancelSearch();
+            $searchInput.blur();
+        });
+
+    });
+
+</script>
+<!--搜索   end-->
+
+<!--获取手机输入法搜索按钮和搜索关键字-->
+<script>
+    $(function(){
+//            var val = $('#searchInput');
+//            var btn = $('button');   //没有存在的btn,已经注释，改为获取手机键盘搜索事件
+//            btn.on('click', function(){
+//                console.log(val.val());
+//            });
+//            $('#searchInput').submit(function(){
+//                alert(val.val());
+//            })
+
+            $("#searchInput").on('keypress',function(e) {
+                var keycode = e.keyCode;
+                var searchWord = $(this).val();
+                if(keycode=='13') {
+                    e.preventDefault();
+                    console.log('你按下了搜索键');
+                    //alert('你按下了搜索键');
+                    console.log('内容是：');
+                    //alert('内容是：'+searchWord);
+                    console.log(searchWord);
+                }
+            });
+        }
+    );
+</script>
+<!--获取手机输入法搜索按钮和搜索关键字  end-->
+
+<!--新增客户弹窗页面控制-->
+<script>
+    var XihaAddBtn = $('#xiha-addbtn');
+    //  var xihaAlert = $('.xiha-alert');
+    XihaAddBtn.on('click',function () {
+    //  alert('addbtn');
+        $(this).fadeOut();
+        $('.xiha-alert').fadeIn();
+        $('.xiha-content').fadeOut();
+        $('.xiha-list').fadeOut();
+        $('.xiha-searchBtn').fadeOut();
+    });
+</script>
+<!--新增客户弹窗页面控制    end-->
+
+<!--所在地区数据控制-->
+<script>
+    var area1 = new LArea();
+    area1.init({
+        'trigger': '#address',           //触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+        'valueTo': '#addressNumber',     //选择完毕后id属性输出到该位置
+        'keys': {
+            id: 'id',
+            name: 'name'
+        },                  //绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+        'type': 1,          //数据源类型
+        'data': LAreaData   //数据源
+    });
+    area1.value=[1,13,3];   //控制初始位置，注意：该方法并不会影响到input的value
+</script>
+<!--所在地区数据控制     end-->
+
+<!--新增客户地址选择获取-->
+<script>
+    //            str=获取input的值
+    //            strs=str.split("/");   ///分割字符
+    //            a=strs[0];
+    //            b=strs[1];
+    $(function(){
+
+
+
+        var gender = $('.weui-switch-cp__input.gender');
+
+        $('#addbtn').click(function() {
+
+            //获取选择的地区与相应值
+            var addressStr = $('#address').val();            //客户地址
+            var addressNumber = $('#addressNumber').val();   //客户地址数字
+            var birthdayVal = $('#birthday').val();          //用户出生时间值
+            var addressStrSplit = addressStr.split("-");     //拆分省市名字
+            var addressStrSplitN = addressNumber.split("-"); //拆分省市代表数据
+            var birthdayYmd = birthdayVal.split("-");        //拆分日期
+            var birthdayY = birthdayYmd[0];                  //年
+            var birthdayM = birthdayYmd[1];                  //月
+            var birthdayD= birthdayYmd[2];                  //日
+            var province = addressStrSplit[0];
+            var provinceN = addressStrSplitN[0];
+            var city = addressStrSplit[1];
+            var cityN = addressStrSplitN[1];
+            var dist = addressStrSplit[2];
+            var distN = addressStrSplitN[2];
+            var kehuSourceV = $("#kehuSource").val(); //客户来源
+            var xihaname = $('#xihaname').val(); //姓名
+            var xihatel = $('#xihatel').val();  //手机号
+            var xihaqq = $('#xihaqq').val();  //QQ
+            var xihaweixin = $('#xihaweixin').val();  //微信
+            var xihaaddress = $('#xihaaddress').val();  //详细地址
+            var xihaconnect = $('#xihaconnect').val();  //联系人
+            var xihaconnectTel = $('#xihaconnectTel').val();  //联系人电话
+            var xiharemarks = $('#xiharemarks').val();  //备注
+//          var genderStatus = gender.is(':checked').val();
+            var genderStatus1 = $('input[name="gender"]:checked').val();
+            console.log('-------------------------------');
+            console.log('-------------------------------');
+            console.log('姓名:'+xihaname);
+            console.log('手机:'+xihatel);
+            console.log('QQ:'+xihaqq);
+            console.log('微信:'+xihaweixin);
+            console.log('性别:'+genderStatus1);
+            console.log('出生:'+birthdayVal);
+            console.log('来源:'+kehuSourceV);
+            console.log('城市:'+addressStr);
+            console.log('街道:'+xihaaddress);
+            console.log('联系人:'+xihaconnect);
+            console.log('联系人电话:'+xihaconnectTel);
+            console.log('备注:'+xiharemarks);
+            console.log('-------------------------------');
+            console.log('-------------------------------');
+            console.log('-------------------------------');
+            console.log('客户资源选中的是:');
+            console.log(kehuSourceV);
+            console.log('生日值是:');
+            console.log(birthdayVal);
+            console.log('年:');
+            console.log(birthdayY);
+            console.log('月:');
+            console.log(birthdayM);
+            console.log('日:');
+            console.log(birthdayD);
+            console.log('地址分别是:');
+            console.log(province+provinceN);
+            console.log(city+cityN);
+            console.log(dist+distN);
+            console.log('性别选的是:');
+            console.log(genderStatus1);
+            if (!isQQ($.trim(xihaqq))) {
+                //alert("请输入正确的QQ号码");
+                console.log("请输入正确的QQ号码");
+            }else if (!isPhone($.trim(xihatel))) {
+                //alert('手机号不符合');
+                console.log('手机号不符合');
+            }else if (!isPhone($.trim(xihaconnectTel))) {
+                //alert('联系人手机号有误');
+                console.log('联系人手机号有误');
+                return false;
+            }
+        });
+        function isQQ(aQQ) {
+            var bValidate = RegExp(/^[1-9][0-9]{4,10}$/).test(aQQ);
+            if (bValidate) {
+                return true;
+            }
+            else {
+                return false;
+            } ;
+
+        };
+        function isPhone(aPhone) {
+            var bValidate = RegExp(/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$/).test(aPhone);
+            if (bValidate) {
+                return true;
+            }
+            else
+                return false;
+        };
+
+    });
+</script>
+
+<!--新增客户地址选择获取    end-->
+
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+{
+  "listNotDeal":[
+
+    {
+      "imgURL":"images/ico3.png",
+      "name":"01会员名",
+      "link":"#",
+      "desc":"X"
+    },
+    {
+      "imgURL":"images/ico3.png",
+      "name":"02会员名",
+      "link":"#",
+      "desc":"X"
+    },
+    {
+      "imgURL":"images/ico3.png",
+      "name":"03会员名",
+      "link":"#",
+      "desc":"X"
+    },
+    {
+      "imgURL":"images/ico3.png",
+      "name":"04会员名",
+      "link":"#",
+      "desc":"end"
+    }
+
+  ],
+  "listFollowed":[
+    {
+      "imgURL":"images/ico17.png",
+      "name":"02会员",
+      "link":"#",
+      "desc":"Z"
+    }
+
+  ],
+  "listStored":[
+    {
+      "imgURL":"images/ico20.png",
+      "name":"03会员名",
+      "link":"#",
+      "desc":"Y"
+    }
+
+  ],
+  "listListened":[
+    {
+      "imgURL":"images/ico16.png",
+      "name":"04会员名",
+      "link":"#",
+      "desc":"W"
+    }
+
+  ],
+  "listMoneypart":[
+    {
+      "imgURL":"images/ico16.png",
+      "name":"05会员名",
+      "link":"#",
+      "desc":"15800"
+    }
+
+  ],
+  "listDeal":[
+    {
+      "imgURL":"images/ico17.png",
+      "name":"06会员名",
+      "link":"#"
+    },
+    {
+      "imgURL":"images/ico18.png",
+      "name":"06D会员名",
+      "link":"#"
+    }
+
+  ]
+
+}

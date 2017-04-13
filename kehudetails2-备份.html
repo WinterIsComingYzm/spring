@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>令狐冲</title>
+<link rel="stylesheet" href="css/weui.css"/>
+<link rel="stylesheet" href="css/example.css"/>
+<link rel="stylesheet" href="css/xiha.css"/>
+<script src="js/jquery.min.js"></script>
+</head>
+<body>
+<div class="">
+ <!--客户详情头部-->
+  <div class="weui-grids xiha-kehu-details">
+   <a href="javascript:;" class="weui-grid kehu-width kehu-header-img">
+    <div class="weui-grid__icon xiha-img"> <img src="./images/123.png" alt="" > </div>
+    </a>
+     <a href="javascript:;" class="weui-grid kehu-width kehu-notdeal">
+    <p class="weui-grid__label">未处理</p>
+    </a>
+     <a href="javascript:;" class="weui-grid kehu-width kehu-paid-desc">
+    <p class="weui-grid__label">已交定金2000元，剩余尾款17800元</p>
+    </a>
+     <a href="javascript:;" class="weui-grid kehu-tel">
+    <div class="weui-grid__icon"> <img src="./images/ico11.png" alt=""> </div>
+    <p class="weui-grid__label">电话</p>
+    </a>
+     <a href="javascript:;" class="weui-grid kehu-mess">
+    <div class="weui-grid__icon"> <img src="./images/ico22.png" alt=""> </div>
+    <p class="weui-grid__label">短信</p>
+    </a>
+     <a href="javascript:;" class="weui-grid kehu-webchat">
+    <div class="weui-grid__icon"> <img src="./images/ico33.png" alt=""> </div>
+    <p class="weui-grid__label">微信</p>
+    </a>
+  </div>
+    <!--选项卡关联-->
+        <!--客户进度-->
+    <div>
+        <div class="weui-navbar kehu-rate ">
+            <div class="weui-navbar__item xiha-avtive show1">跟进记录</div>
+            <div class="weui-navbar__item show2">成长记录</div>
+            <div class="weui-navbar__item show3">详细资料</div>
+        </div>
+    </div>
+    <!--选项卡显示项-->
+    <div class="xihaitem0">
+        <div class="xihaitem" id="xihaitem1">
+                <div class="weui-tab__panel  kehu-rate-1">
+                    <div class="weui-cells">
+                        <a class="weui-cell weui-cell_access" href="javascript:;" style="">
+                            <div class="weui-cell__hd"><img src="./images/ico55.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                            <div class="weui-cell__bd">
+                                <p>添加待办事项</p>
+                            </div>
+                            <div class="weui-cell__ft"></div>
+                        </a>
+                        <a class="weui-cell weui-cell_access" href="javascript:;" style="">
+                            <div class="weui-cell__hd"><img src="./images/ico66.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                            <div class="weui-cell__bd">
+                                <p>添加跟进记录</p>
+                            </div>
+                            <div class="weui-cell__ft"></div>
+                        </a>
+                    </div>
+                </div>
+            <div class="xiha-drop-cont">
+
+                <!--<div class="weui-cell summary ">-->
+                    <!--<div class="" style="position: relative;margin-right: 10px;height: 120px; overflow: scroll;">-->
+                        <!--<img src="images/summary-ico.png" style="display: block">-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__bd" style="height: 126px; overflow: scroll;">-->
+                        <!--<p class="summary-tit">系统<span>昨天:19:20</span></p>-->
+                        <!--<p class="summary-desc">XXX创建了摘要信息</p>-->
+                        <!--<p class="summary-desc">跟进时间:2017-02-03 20:20</p>-->
+                        <!--<p class="summary-desc">待办事项:XXX</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </div>
+        </div>
+        <div class="xihaitem xihahidden" id="xihaitem2">
+            <!--<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">-->
+                <!--<div class="weui-media-box__hd">-->
+                    <!--<img class="weui-media-box__thumb" src="images/ico8.png" alt="">-->
+                <!--</div>-->
+                <!--<div class="weui-media-box__bd">-->
+                    <!--<h4 class="weui-media-box__title">2017-3-31</h4>-->
+                    <!--<p class="weui-media-box__desc">成长记录，记录一些事项，这些都是点点滴滴的成长。</p>-->
+                <!--</div>-->
+            <!--</a>-->
+            <!--<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">-->
+                <!--<div class="weui-media-box__hd">-->
+                    <!--<img class="weui-media-box__thumb" src="images/ico9.png" alt="">-->
+                <!--</div>-->
+                <!--<div class="weui-media-box__bd">-->
+                    <!--<h4 class="weui-media-box__title">2017-3-29</h4>-->
+                    <!--<p class="weui-media-box__desc">成长记录，记录一些事项，这些都是点点滴滴的成长。</p>-->
+                <!--</div>-->
+            <!--</a>-->
+        </div>
+
+        <div class="xihaitem xihahidden" id="xihaitem3">
+            <article class="weui-article">
+                <h1>名字</h1>
+                <section>
+                    <h2 class="title">标签之类的男女</h2>
+                    <section>
+                        <h3>标题之类</h3>
+                        <p>客户详细描述，备注之类的，</p>
+                        <p> <img src="./images/123.png" alt=""></p>
+                    </section>
+                </section>
+            </article>
+        </div>
+
+    </div>
+    <!--选项卡控制-->
+    <script>
+
+        $(function () {
+            $('.kehu-rate .weui-navbar__item').click(function () {
+                $(this).addClass('xiha-avtive');
+                $(this).siblings().removeClass("xiha-avtive");
+            });
+            $('.show1').click(function(){
+                $('#xihaitem1').removeClass('xihahidden');
+                $('#xihaitem1').siblings().addClass('xihahidden');
+            });
+            $('.show2').click(function(){
+                $('#xihaitem2').removeClass('xihahidden');
+                $('#xihaitem2').siblings().addClass('xihahidden');
+            });
+            $('.show3').click(function(){
+                $('#xihaitem3').removeClass('xihahidden');
+                $('#xihaitem3').siblings().addClass('xihahidden');
+            })
+        })
+
+    </script>
+    <!--<script src="js/zepto.min.js"></script>-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jweixin-1.0.0.js"></script>
+    <script src="js/weui.min.js"></script>
+    <!--<script src="js/xihaJSON.js"></script>-->
+    <script src="js/dropload.min.js"></script>
+    <!--111-->
+    <script>
+        $(function () {
+            var page=0;
+            var item=1;
+            var item2=2;
+            $('.xiha-drop-cont').dropload({
+                scrollArea : window,
+                domDown : {
+                    domClass   : 'dropload-down',
+                    domRefresh : '<div class="dropload-refresh">↑上拉 查看更多...</div>',
+                    domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中..</div>',
+                    domNoData  : '<div class="dropload-noData">暂无数据...</div>'
+                },
+                loadDownFn : function(me){
+                    page++;
+//                    item++;
+                    $.ajax({
+                        type: 'POST',
+                        url:'xihadetails.json?item=' + item + '&page=' + page,
+                        dataType: 'json',
+                        success: function(data){
+                            var result1 = '';
+                            for(var i = 0; i < data.details.length; i++){
+                                result1 += '<div class="weui-cell summary summary-more">'
+                                        + '<div class="" style="position: relative;margin-right: 10px;">'
+                                        + '<img src="'+data.details[i].imgURL+'" style="display: block">'
+                                        + '</div>'
+                                        + '<div class="weui-cell__bd">'
+                                        + '<p class="summary-tit">'+data.details[i].suTit+'<span>'+data.details[i].time+'</span></p>'
+                                        + '<p class="summary-desc">'+data.details[i].suDesc+'</p>'
+                                        + '<p class="summary-desc su-time">跟进时间:'+data.details[i].timeG+'</p>'
+                                        + '<p class="summary-desc">待办事项:'+data.details[i].suDesc+'</p>'
+                                        + '</div>'
+                                        + '</div>';
+                            }
+                            setTimeout(function(){
+                                // 插入数据到页面，放到最后面
+                                $('.dropload-down').remove();
+                                $('.xiha-drop-cont').append(result1);
+                                // 每次数据插入，必须重置
+                                me.resetload();
+                            },500);
+                        },
+                        error: function(xhr, type){
+                            alert('ajax出错');
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                },
+                threshold : 50
+            });
+
+            $('#xihaitem2').dropload({
+                scrollArea : window,
+                domDown : {
+                    domClass   : 'dropload-down',
+                    domRefresh : '<div class="dropload-refresh">↑上拉 查看更多...</div>',
+                    domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中..</div>',
+                    domNoData  : '<div class="dropload-noData">暂无数据...</div>'
+                },
+                loadDownFn : function(me){
+                    page++;
+//                    item++;
+                    $.ajax({
+                        type: 'POST',
+                        url:'xihadetails.json?item=' + item2 + '&page=' + page,
+                        dataType: 'json',
+                        success: function(data){
+                            var result2 = '';
+                            for(var i = 0; i < data.details2.length; i++){
+                                result2 += '<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">'
+                                    + '<div class="weui-media-box__hd">'
+                                    + '<img class="weui-media-box__thumb" src="'+data.details2[i].imgURL+'">'
+                                    + '</div>'
+                                    + '<div class="weui-media-box__bd">'
+                                    + '<h4 class="weui-media-box__title">'+data.details2[i].time+'</h4>'
+                                    + '<p class="weui-media-box__desc">'+data.details2[i].suDesc+'</p>'
+                                    + '</div>'
+                                    + '</a>';
+                            }
+                            setTimeout(function(){
+                                $('.dropload-down').remove();
+                                $('#xihaitem2').append(result2);
+                                me.resetload();
+                            },500);
+                        },
+                        error: function(xhr, type){
+                            alert('ajax出错');
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                },
+                threshold : 50
+            });
+
+
+        });
+    </script>
+    <!--111-end-->
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>跟进记录</title>
+    <link rel="stylesheet" href="css/weui.min.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
+    <link rel="stylesheet" href="css/weui2.css"/>
+    <link rel="stylesheet" href="css/weui3.css"/>
+    <link rel="stylesheet" href="css/xiha.css"/>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body ontouchstart>
+<div class="addDaiban">
+    <div class="weui-cells xiah-daiban">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><img src="images/ico3.png" alt="" style="display:block;height: 60px;width: 60px;"></div>
+            <div class="weui-cell__bd">
+                <p>令狐冲</p>
+            </div>
+            <div class="weui-cell__ft xiha-btn-moneypart">已交定金</div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form">
+
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">发送通知给客户所有人和共享人</div>
+            <div class="weui-cell__ft">
+                <label for="switchCP" class="weui-switch-cp">
+                    <input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>沟通方式</p>
+            </div>
+            <div class="weui-cell__ft">
+                <select id="communicationMethod">
+                    <option value="0">电话沟通</option>
+                    <option value="1">微信沟通</option>
+                    <option value="2">在线沟通</option>
+                    <option value="3">QQ沟通</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>更新状态</p>
+            </div>
+            <div class="weui-cell__ft xiha-time" style="font-size: 14px;"><span>2017/04/10 15:43</span></div>
+        </div>
+    </div>
+    <div class="page__bd">
+        <article class="weui-article">
+            <h1 style="color:#898989;font-size: 14px;">跟进客户，邀约进店</h1>
+            <h1 style="color:#04be02;font-size: 14px;">微信语音接口</h1>
+        </article>
+
+        <div class="weui-gallery" id="gallery">
+            <span class="weui-gallery__img" id="galleryImg"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="weui-cells weui-cells_form xiha-up" style="margin-top:0px;">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <!--<div class="weui-uploader__hd">-->
+                            <!--<p class="weui-uploader__title">图片上传</p>-->
+                            <!--<div class="weui-uploader__info">上传张数</div>-->
+                        <!--</div>-->
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                                <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                                <!--<li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">-->
+                                    <!--<div class="weui-uploader__file-content">-->
+                                        <!--<i class="weui-icon-warn"></i>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                                <!--<li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(./images/pic_160.png)">-->
+                                    <!--<div class="weui-uploader__file-content">50%</div>-->
+                                <!--</li>-->
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*;capture=camera" multiple="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function(){
+        //沟通方式选中项获取
+        $("#communicationMethod").change(function() {
+            SelectChange();
+        });
+        function SelectChange() {
+            var selectValue = $("#communicationMethod").val();
+            console.log('选中项的value:');
+            console.log(selectValue);
+            //alert('选的是'+selectValue);
+        };
+        //判断用户选中状态
+        var switchCP = $('#switchCP');
+        switchCP.click(function(){
+            var switchCPstatus = switchCP.is(':checked');
+            if(switchCPstatus){
+                console.log('选中');
+            }else {
+                console.log('取消');
+            }
+        });
+    });
+</script>
+
+<script src="js/weui.min.js"></script>
+</body>
+</html>

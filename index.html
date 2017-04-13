@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>我的主页</title>
+    <link rel="stylesheet" href="css/weui.css"/>
+    <link rel="stylesheet" href="css/example.css"/>
+</head>
+<body>
+    <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+    <div class="container" id="container"></div>
+<div class="loading" id="loading" style="display: none;">
+<div class="loading-logo-wrap">
+<img src="images/loading-bg.png" class="loading-bg">
+<div class="loading-logo">
+<img src="images/loading.png">
+<div class="loading-line"></div>
+</div>
+</div>
+<div class="loading-text">©&nbsp;2017&nbsp;嘻哈帮街舞<br><span>Beta V1.0</span></div></div>
+<div class="page grid js_show">
+    <div class="page__hd avatarbg">
+        <div class="weui-avatar-circle" style="z-index:10;">
+<img src="http://wx.qlogo.cn/mmopen/gS4VSVgKXrJWHWjo3h0uLnpB6h33adicnNthKaZyA6uMLNUEj4fhibwZMwSRvHxaicYWxHEMFUt1YMhtZBfVFErZA/0" class="weui-avatar-url">
+<span class="weui-avatar-mark">销</span>
+</div>
+<div class="weui-avatar-name" style="position: relative;z-index:10;">胡培帅</div>
+<div class="role-list" style="position: relative;z-index:10;"><span>经三校区</span></div>
+<canvas id="canvas" style="position:absolute;top:0px;left:0px;z-index:1;"></canvas>
+    </div>
+<div class="page__bd">
+        <div class="weui-panel">
+            <div class="weui-panel__bd weui-flex">
+            <div class="weui-flex-list"><h3>本月完成业绩</h3><p><span style="color:#179de9;">300</span>万</p></div>
+			<div class="weui-flex-list"><h3>本月目标业绩</h3><p><span style="color:#ffa457;">500</span>万</p></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="weui-grids">
+        <a href="kehulist.html" class="weui-grid">
+            <div class="weui-grid__icon" style="position: relative;">
+                <img src="images/mc.png" alt="">
+				<span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">&nbsp;</span>
+            </div>
+            <p class="weui-grid__label">我的客户</p>
+			
+        </a>
+        <a href="yeji.html" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="images/qianbao.png" alt="">
+            </div>
+            <p class="weui-grid__label">我的业绩</p>
+        </a>
+        <a href="daibanlist.html" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="images/rili.png" alt="">
+            </div>
+            <p class="weui-grid__label">待办事项</p>
+        </a>
+        <a href="xiaoxilist.html" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="images/xiaoxi.png" alt="">
+            </div>
+            <p class="weui-grid__label">消息通知</p>
+        </a>
+        <a href="shenqinglist.html" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="images/edit.png" alt="">
+            </div>
+            <p class="weui-grid__label">我的申请</p>
+        </a>
+        <a href="settinglist.html" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="images/setting.png" alt="">
+            </div>
+            <p class="weui-grid__label">个人设置</p>
+        </a>
+        
+    </div>
+</div>
+
+
+    <script src="js/zepto.min.js"></script>
+    <script src="js/jweixin-1.0.0.js"></script>
+    <script src="js/weui.min.js"></script>
+    <!--<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
+    <!--<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>-->
+<script>
+$(function(){ 
+　　$('#loading').show();
+setTimeout(function(){$('#loading').hide();},2000);
+});
+var canvas = document.getElementById('canvas');  
+		var ctx = canvas.getContext('2d');  
+		canvas.width = canvas.parentNode.offsetWidth;  
+		canvas.height = canvas.parentNode.offsetHeight;
+
+
+		//如果浏览器支持requestAnimFrame则使用requestAnimFrame否则使用setTimeout  
+		window.requestAnimFrame = (function(){  
+		return  window.requestAnimationFrame       ||  
+		        window.webkitRequestAnimationFrame ||  
+		        window.mozRequestAnimationFrame    ||  
+		        function( callback ){  
+		          window.setTimeout(callback, 1000 / 60);  
+		        };  
+		})();  
+		//初始角度为0  
+		var step = 0;  
+		//定义三条不同波浪的颜色  
+		var lines = ["rgba(0,222,255, 0.2)",  
+		               "rgba(157,192,249, 0.2)",  
+		               "rgba(0,168,255, 0.2)"];  
+		function loop(){  
+		    ctx.clearRect(0,0,canvas.width,canvas.height);  
+		    step++;  
+		    //画3个不同颜色的矩形  
+		    for(var j = lines.length - 1; j >= 0; j--) {
+		        ctx.fillStyle = lines[j];  
+		        //每个矩形的角度都不同，每个之间相差45度  
+		        var angle = (step+j*45)*Math.PI/180;  
+		        var deltaHeight   = Math.sin(angle) * 50;  
+		        var deltaHeightRight   = Math.cos(angle) * 50; 
+		        ctx.beginPath();  
+		        ctx.moveTo(0, canvas.height/2+deltaHeight);  
+		        ctx.bezierCurveTo(canvas.width /2, canvas.height/2+deltaHeight-50, canvas.width / 2, canvas.height/2+deltaHeightRight-50, canvas.width, canvas.height/2+deltaHeightRight);  
+		        ctx.lineTo(canvas.width, canvas.height);  
+		        ctx.lineTo(0, canvas.height);  
+		        ctx.lineTo(0, canvas.height/2+deltaHeight);  
+		        ctx.closePath();  
+		        ctx.fill();  
+		    }
+			requestAnimFrame(loop);
+}
+loop(); 
+</script>
+</body>
+</html>
